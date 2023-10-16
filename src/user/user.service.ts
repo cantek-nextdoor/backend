@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,11 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = await this._userModel.create<User>(createUserDto);
+    const id = uuid();
+    const createdUser = await this._userModel.create<User>({
+      ...createUserDto,
+      id,
+    });
     return createdUser;
   }
 
