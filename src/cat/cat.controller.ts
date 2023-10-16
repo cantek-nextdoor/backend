@@ -1,10 +1,10 @@
 import { Controller, Get, Header } from '@nestjs/common';
 
-@Controller('cats')
-export class CatsController {
+@Controller('cat')
+export class CatController {
   @Get()
   @Header('content-type', 'application/json')
   findAll(): Record<string, string> {
-    return { hi: 'cats' };
+    return { hi: 'cat' };
   }
 }

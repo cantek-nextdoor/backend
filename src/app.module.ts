@@ -1,11 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsController } from './controllers/cats.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
+import { CatModule } from './cat/cat.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController, CatsController],
+  imports: [
+    MongooseModule.forRoot(
+      'mongodb://user:password@localhost:27018/cantek_nextdoor_mongodb',
+    ),
+    AuthModule,
+    CatModule,
+  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
