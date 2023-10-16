@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  cantek-nextdoor_mongodb:
+    image: mongo:7.0
+    volumes:
+      - ./mongodb:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=cantek_nextdoor_mongodb
+    ports:
+      - "27018:27017"
