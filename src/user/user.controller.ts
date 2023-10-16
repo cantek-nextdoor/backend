@@ -7,19 +7,32 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private _userService: UserService) {}
 
-  @Get(':id')
-  async findOne(@Param('id') uuid: string) {
-    return `This action gets the user with ${uuid} uuid.`;
+  @Get()
+  async findUserByEmail(@Param('id') uuid: string) {
+    console.log('test');
+    // const user = this._authService.signIn('abc@gmail.com', 'password');
+    // console.log('user', user);
+    // return user;
+  }
+
+  @Get(':email')
+  async findOne(@Param('email') email: string) {
+    const user = await this._userService.findUser(email);
+    console.log('user', user);
+    return user;
   }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    return `This action creates a new user.`;
-    // return this._userService.create(createUserDto);
+    return this._userService.create(createUserDto);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return `This action updates the #${id} user`;
+  @Put(':email')
+  async update(
+    @Param('email') email: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    await this._userService.updateUser(updateUserDto);
+    return updateUserDto;
   }
 }
