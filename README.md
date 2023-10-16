@@ -9,6 +9,12 @@ npm i
 npm run start:dev
 ```
 
+3. Creating controller
+   https://docs.nestjs.com/controllers
+```
+nest g controller [name]
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
