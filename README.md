@@ -20,6 +20,21 @@ npm run start:dev
 docker-compose up -d
 ```
 
+4. Create a copy of `.env.sample` and rename it to `.env`
+
+5. Create a jwt secret and put it in `.env`
+
+```
+openssl rand -base64 60
+```
+
+6. Your `.env` should look like this:
+
+```
+JWT_SECRET={{ your_jwt_secret }}
+MONGODB_URI=mongodb://user:password@localhost:27018/cantek_nextdoor_mongodb
+```
+
 Creating controller
 https://docs.nestjs.com/controllers
 
