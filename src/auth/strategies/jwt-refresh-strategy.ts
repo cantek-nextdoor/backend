@@ -10,13 +10,14 @@ export class RefreshJwtStrategy extends PassportStrategy(
 ) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refresh'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
+      passReqToCallback: true,
       secretOrKey: `${process.env.JWT_SECRET}`,
     });
   }
 
   async validate(payload: any) {
-    return { user: payload.sub, username: payload.username };
+    return payload;
   }
 }

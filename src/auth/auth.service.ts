@@ -13,38 +13,41 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string) {
-    const user = await this._userService.findUser(email);
+    const user = await this._userService.findUserByProps({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
     return null;
   }
 
-  async login({ email }: SignInDto) {
-    const payload = { email };
+  async login(user: SignInDto) {
+    const payload = { email: user.email };
 
     return {
-      email,
+      email: user.email,
       accessToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
+        expiresIn: '60s',
       }),
       refreshToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '60s',
+        expiresIn: '7d',
       }),
     };
   }
 
   async refreshToken(user: User) {
     const payload = {
-      id: user.id,
+      uuid: user.uuid,
       email: user.email,
     };
 
     return {
       accessToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
+        expiresIn: '60s',
       }),
     };
   }

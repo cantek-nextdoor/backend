@@ -22,7 +22,7 @@ export class AuthController {
     private _userService: UserService,
   ) {}
 
-  @UseGuards(new LocalAuthGuard())
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: SignInDto) {

@@ -3,10 +3,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true, versionKey: false })
 export class User {
-  @Prop()
-  id: string;
+  @Prop({ unique: true })
+  uuid: string;
 
   @Prop()
   display_name: string;
@@ -20,7 +20,17 @@ export class User {
   @Prop()
   points: number;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    validate: {
+      validator: (v) => {
+        return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i.test(
+          v,
+        );
+      },
+      message: (v) => `Invalid postal_code ${v.value}`,
+    },
+  })
   postal_code: string;
 }
 
