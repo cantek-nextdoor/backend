@@ -1,7 +1,11 @@
 export class UpdatePostDto {
-  display_name: string;
-  email: string;
-  password: string;
+  postId: string;
+  title: string;
+  imageUrl: string;
+  description: string;
+  tag: [string];
   points: number;
-  postal_code: string;
+  postedDate: Date;
+  dueDate: Date;
+  completed: boolean;
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
@@ -7,11 +7,17 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private _PostService: PostService) {}
 
-  @Get("/")
-  async findPostByPostId(@Query('postId') uuid: string) {
-    console.log('Find post!: '+ uuid);
+  @Post()
+  async create(@Body() createPostDto: CreatePostDto) {
+    return this._PostService.create(createPostDto);
   }
 
+  @Get("/")
+  async findPostByPostId(@Query('postId') postId: string) {
+    console.log('Find post!: '+ postId);
+    const foundPost =  await this._PostService.findPostsByPostId(postId);
+    return foundPost;
+  }
 
   @Get('/searchPosts/:userid')
   async findUserAllPost(@Param('userid') userId: string) {
@@ -20,17 +26,23 @@ export class PostController {
     return PostList;
   }
 
-  @Post()
-  async create(@Body() createPostDto: CreatePostDto) {
-    return this._PostService.create(createPostDto);
+  @Get('/searchPosts/:tag')
+  async findPostsByTag(@Param('tag') tag: string) {
+    const PostList = await this._PostService.findPostByTag(tag);
+    console.log('PostList', PostList);
+    return PostList;
   }
 
-  // @Put(':email')
-  // async update(
-  //   @Param('email') email: string,
-  //   @Body() updateUserDto: UpdateUserDto,
-  // ) {
-  //   await this._userService.updateUser(updateUserDto);
-  //   return updateUserDto;
-  // }
+  @Patch('/update')
+  async updatePost(@Query('postId') postId: string ,  @Body() UpdatePostDto: UpdatePostDto) {
+    console.log('Update post id: '+postId);
+    return this._PostService.updatePost(postId, UpdatePostDto);
+  }
+
+  @Delete('/delete')
+  async deletePost(@Query('postId') postId: string) {
+    console.log('Delete post id: '+postId);
+    return this._PostService.deletePost(postId);
+  }
+
 }

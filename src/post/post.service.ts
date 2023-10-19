@@ -30,20 +30,54 @@ export class PostService {
     }
   }
 
-  // async findPostByTag(tag: string): Promise<Post | undefined> {
-  //   return this._postModel.find({ tag });
-  // }
+  async findPostsByPostId(postId: string) {
+    try{
+    const posts = await this._postModel.find({ postId: postId });
+    console.log(posts)
+    return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  // async findPostByTag(tag: string): Promise<Post | undefined> {
-  //   return this._postModel.findOne({ tag });
-  // }
+  async findPostByTag(tagForSerch: string){
+    try{
+      const posts = await this._postModel.find({ tag: tagForSerch });
+      console.log(posts)
+      return posts;
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-  // async updatePost(updatePostDto: UpdatePostDto) {
-  //   return this._postModel.updateOne(
-  //     { postID: updatePostDto.postId },
-  //     updatePostDto,
-  //   );
-  // }
+
+
+  async updatePost(postId: string, updatePostDto: UpdatePostDto) {
+    try{
+    const updateResult =  await 
+    this._postModel.updateOne(
+      {postId: postId},
+      updatePostDto,
+    );
+    console.log(updateResult);
+    return updateResult;
+    } catch (error) {
+    console.log(error);
+    }
+  }
+
+  async deletePost(postId: string) {
+    try{
+    const deleteResult =  await 
+    this._postModel.deleteOne(
+      {postId: postId}
+    );
+    console.log(deleteResult);
+    return deleteResult;
+    } catch (error) {
+    console.log(error);
+    }
+  }
 
   // async findAll(): Promise<User[]> {
   //   return this._userModel.find().exec();
