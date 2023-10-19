@@ -42,6 +42,11 @@ https://docs.nestjs.com/controllers
 nest g controller [name]
 ```
 
+Place list of postal codes in mongodb
+- Create a postal-code collection
+- Import data using csv file. Use only one: canada.csv, ontario.csv, or toronto.csv (depending on how large you want the scope of the app to be)
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
