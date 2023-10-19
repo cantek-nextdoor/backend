@@ -83,9 +83,16 @@ export class PostService {
         .exec();
   
       if (post) {
-        const likedUserList = post.likedUserList;
-        console.log("Liked User List: ", likedUserList);
-        return likedUserList;
+        const likedUsers = post.likedUserList;
+        likedUsers.push(userId);
+        console.log("Liked User List: ", likedUsers);
+
+        const updateResult =  await 
+        this._postModel.updateOne(
+          {postId: postId},
+          {likedUserList: likedUsers},
+        );
+        return updateResult;
       } else {
         console.log("Post not found.");
         return null; // or handle the case where the post is not found
