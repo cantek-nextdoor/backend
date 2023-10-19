@@ -38,6 +38,9 @@ export class Post {
   @Prop ({required: true })
   completed: boolean;
 
+  @Prop()
+  likedUserList: [String];
+
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

@@ -50,8 +50,6 @@ export class PostService {
       }
     }
 
-
-
   async updatePost(postId: string, updatePostDto: UpdatePostDto) {
     try{
     const updateResult =  await 
@@ -65,6 +63,34 @@ export class PostService {
     console.log(error);
     }
   }
+
+  async addLikedUser(userId: string, postId: string) {
+    try{
+      const posts = await this._postModel.find({ postId: postId }).select("likedUserList").exec();
+      // const likedUserList = posts.likedUserList;
+      console.log("Liked User List: ", posts);
+    return posts;
+    } catch (error) {
+    console.log(error);
+    }
+  }
+
+  // async addLikedUser(userId: string, postId: string) {
+  //   try {
+  //     const post = await this._postModel.findOne({ _id: new Object(postId) }); // Use findOne and ObjectId
+  //     if (post) {
+  //       const likedUserList = post.likedUserList;
+  //       console.log("Liked User List: ", likedUserList);
+  //       return likedUserList;
+  //     } else {
+  //       console.log("Post not found.");
+  //       return null; // or handle the case where the post is not found
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw error;
+  //   }
+  // }
 
   async deletePost(postId: string) {
     try{

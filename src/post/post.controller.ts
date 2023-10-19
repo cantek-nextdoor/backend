@@ -12,6 +12,7 @@ export class PostController {
     return this._PostService.create(createPostDto);
   }
 
+
   @Get("/")
   async findPostByPostId(@Query('postId') postId: string) {
     console.log('Find post!: '+ postId);
@@ -37,6 +38,12 @@ export class PostController {
   async updatePost(@Query('postId') postId: string ,  @Body() UpdatePostDto: UpdatePostDto) {
     console.log('Update post id: '+postId);
     return this._PostService.updatePost(postId, UpdatePostDto);
+  }
+
+  @Patch('/liked')
+  async addLikedUser(@Query('userId') userId: string , @Query('postId') postId: string) {
+    console.log('Liked post user id: '+userId+' and post id: '+postId);
+    return this._PostService.addLikedUser(userId, postId);
   }
 
   @Delete('/delete')

@@ -8,4 +8,5 @@ export class UpdatePostDto {
   postedDate: Date;
   dueDate: Date;
   completed: boolean;
+  likedUserList: [string];
 }

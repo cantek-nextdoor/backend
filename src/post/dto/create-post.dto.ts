@@ -10,4 +10,5 @@ export class CreatePostDto {
   postedDate: Date;
   dueDate: Date;
   completed: boolean;
+  likedUserList: [string];
 }
