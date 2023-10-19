@@ -20,8 +20,12 @@ export class User {
   email: string;
 
   @Prop({
-    required: function () {
-      this.user_type === UserAccount.DEFAULT;
+    validate: {
+      validator: (v) => {
+        return /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/.test(v);
+      },
+      message: (v) =>
+        `Password must be at least 8 characters long, contain at least one letter and one number.`,
     },
   })
   password: string;
