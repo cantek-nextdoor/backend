@@ -61,8 +61,11 @@ export class AuthController {
   }
 
   @Post('register')
-  async registerUser(@Body() createUserDto: CreateUserDto) {
-    return await this._userService.create(createUserDto);
+  async registerUser(@Body() createUserDto: CreateUserDto, @Response() res) {
+    const user = await this._userService.createUser(createUserDto);
+    const tokenDetails = await this._authService.signJwt(user);
+    this._authService.setTokensToCookies(res, tokenDetails);
+    res.json({ ...tokenDetails, ...user });
   }
 
   @UseGuards(RefreshJwtGuard)

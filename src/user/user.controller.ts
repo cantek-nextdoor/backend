@@ -4,13 +4,10 @@ import {
   Controller,
   Get,
   Param,
-  Post,
   Put,
   Request,
-  Response,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { JwtGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
@@ -44,14 +41,6 @@ export class UserController {
     const user = await this._userService.findUserByProps({ email });
     console.log('user', user);
     return user;
-  }
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Response() res) {
-    const user = await this._userService.create(createUserDto);
-    const tokenDetails = await this._authService.signJwt(user);
-    this._authService.setTokensToCookies(res, tokenDetails);
-    return { ...tokenDetails, ...user };
   }
 
   @Put(':email')

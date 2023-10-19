@@ -14,7 +14,7 @@ export class UserService {
     @InjectModel(User.name) private _userModel: Model<UserDocument>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
       const uuid = v4();
       const encryptedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -81,8 +81,4 @@ export class UserService {
       updateUserDto,
     );
   }
-
-  // async findAll(): Promise<User[]> {
-  //   return this._userModel.find().exec();
-  // }
 }
