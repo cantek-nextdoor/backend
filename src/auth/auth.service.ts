@@ -22,7 +22,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: SignInDto) {
+  async signJwt(user: SignInDto) {
     const payload = { email: user.email };
 
     return {

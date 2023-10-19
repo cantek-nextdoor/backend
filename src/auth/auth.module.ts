@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt-strategy';
 import { LocalStrategy } from './strategies/local-strategy';
@@ -25,9 +26,10 @@ dotenv.config();
   providers: [
     AuthService,
     JwtService,
-    RefreshJwtStrategy,
+    GoogleStrategy,
     LocalStrategy,
     JwtStrategy,
+    RefreshJwtStrategy,
   ],
   exports: [AuthService, JwtModule],
 })

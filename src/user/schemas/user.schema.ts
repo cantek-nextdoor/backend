@@ -3,6 +3,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
+export enum UserAccount {
+  DEFAULT = 'default',
+  GOOGLE = 'google',
+}
+
 @Schema({ timestamps: true, versionKey: false })
 export class User {
   @Prop({ unique: true })
@@ -14,8 +19,15 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: function () {
+      this.user_type === UserAccount.DEFAULT;
+    },
+  })
   password: string;
+
+  @Prop({ default: UserAccount.DEFAULT })
+  user_type: UserAccount;
 
   @Prop()
   points: number;

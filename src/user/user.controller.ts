@@ -48,7 +48,7 @@ export class UserController {
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this._userService.create(createUserDto);
-    const tokenDetails = await this._authService.login(user);
+    const tokenDetails = await this._authService.signJwt(user);
     return { ...tokenDetails, ...user };
   }
 

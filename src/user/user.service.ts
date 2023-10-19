@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt';
+import { CreateGoogleUserDto } from './dto/create-google-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserAccount, UserDocument } from './schemas/user.schema';
 import { v4 } from 'uuid';
 
 @Injectable()
@@ -19,6 +20,7 @@ export class UserService {
       const encryptedPassword = await bcrypt.hash(createUserDto.password, 10);
       const defaultUserInfo = {
         uuid,
+        user_type: UserAccount.DEFAULT,
         password: encryptedPassword,
         postal_code: createUserDto.postal_code.toUpperCase().replace('-', ' '),
         points: 0,
@@ -29,6 +31,33 @@ export class UserService {
 
       await this._userModel.create<User>({
         ...createUserDto,
+        ...defaultUserInfo,
+      });
+      delete payload.password;
+      return payload;
+    } catch (e) {
+      console.log('e', e);
+      throw new UnprocessableEntityException({ status: 422, ...e });
+    }
+  }
+
+  async createGoogleUser(
+    createGoogleUserDto: CreateGoogleUserDto,
+  ): Promise<User> {
+    try {
+      const uuid = v4();
+      const defaultUserInfo = {
+        uuid,
+        user_type: UserAccount.GOOGLE,
+        postal_code: 'M5J 1E6', // Union Station postal code
+        points: 0,
+        display_name: createGoogleUserDto.email.split('@')[0],
+      };
+
+      const payload = { ...createGoogleUserDto, ...defaultUserInfo };
+
+      await this._userModel.create<User>({
+        ...createGoogleUserDto,
         ...defaultUserInfo,
       });
       delete payload.password;
