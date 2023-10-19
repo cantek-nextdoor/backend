@@ -13,6 +13,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
+  // accessToken & refreshToken are from Google
   async validate(
     accessToken: string,
     refreshToken: string,
@@ -26,8 +27,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       first_name: name.givenName,
       last_name: name.familyName,
       picture: photos[0].value,
-      accessToken,
-      refreshToken,
     };
 
     done(null, user);

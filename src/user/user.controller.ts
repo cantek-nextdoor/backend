@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Request,
+  Response,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -46,9 +47,10 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto, @Response() res) {
     const user = await this._userService.create(createUserDto);
     const tokenDetails = await this._authService.signJwt(user);
+    this._authService.setTokensToCookies(res, tokenDetails);
     return { ...tokenDetails, ...user };
   }
 

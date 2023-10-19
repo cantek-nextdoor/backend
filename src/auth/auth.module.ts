@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { AUTH_ACCESS_TOKEN_EXPIRY } from './auth.constant';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { GoogleStrategy } from './strategies/google.strategy';
@@ -19,7 +20,7 @@ dotenv.config();
     JwtModule.register({
       secretOrPrivateKey: `${process.env.JWT_SECRET}`,
       secret: `${process.env.JWT_SECRET}`,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: AUTH_ACCESS_TOKEN_EXPIRY },
     }),
   ],
   controllers: [AuthController],

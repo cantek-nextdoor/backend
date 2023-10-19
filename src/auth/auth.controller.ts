@@ -34,13 +34,10 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
-    console.log('req.user.email', req.user.email);
     let user = req.user;
-    console.log('user', user);
     const existingUser = await this._userService.findUserByProps({
       email: req.user.email,
     });
-    console.log('existingUser', existingUser);
     if (existingUser && existingUser.user_type !== UserAccount.GOOGLE) {
       throw new BadRequestException(
         'Account already exists. Please sign in with your email and password.',
@@ -49,18 +46,18 @@ export class AuthController {
       console.log('Creating Google user');
       user = await this._userService.createGoogleUser(req.user);
     }
-
-    user = this._authService.signJwt(user);
-    res.set('authorization', user.accessToken);
+    const tokenDetails = await this._authService.signJwt(user);
+    this._authService.setTokensToCookies(res, tokenDetails);
     res.json(user);
   }
 
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
-    console.log('logging in...');
-    return this._authService.signJwt(signInDto);
+  async signIn(@Body() signInDto: SignInDto, @Response() res) {
+    const tokenDetails = await this._authService.signJwt(signInDto);
+    this._authService.setTokensToCookies(res, tokenDetails);
+    res.json({ success: true, ...tokenDetails });
   }
 
   @Post('register')

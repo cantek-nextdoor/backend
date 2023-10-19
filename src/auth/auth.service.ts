@@ -1,4 +1,8 @@
 import * as bcrypt from 'bcrypt';
+import {
+  AUTH_ACCESS_TOKEN_EXPIRY,
+  AUTH_REFRESH_TOKEN_EXPIRY,
+} from './auth.constant';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-in.dto';
@@ -29,11 +33,11 @@ export class AuthService {
       email: user.email,
       accessToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '60s',
+        expiresIn: AUTH_ACCESS_TOKEN_EXPIRY,
       }),
       refreshToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '7d',
+        expiresIn: AUTH_REFRESH_TOKEN_EXPIRY,
       }),
     };
   }
@@ -47,8 +51,17 @@ export class AuthService {
     return {
       accessToken: this._jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '60s',
+        expiresIn: AUTH_ACCESS_TOKEN_EXPIRY,
       }),
     };
+  }
+
+  setTokensToCookies(res, tokenDetails) {
+    res.cookie('access_token', tokenDetails.accessToken, {
+      maxAge: 60 * 1000,
+    });
+    res.cookie('refresh_token', tokenDetails.refreshToken, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
   }
 }
