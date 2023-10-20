@@ -20,8 +20,34 @@ npm run start:dev
 docker-compose up -d
 ```
 
-Creating controller
+4. Create a copy of `.env.sample` and rename it to `.env`
+
+5. Create a jwt secret and put it in `.env`
+
+```
+openssl rand -base64 60
+```
+
+6. Generate Google OAuth [here](https://console.cloud.google.com/apis/credentials) to test Google Login
+   Watch the first 5 minutes of the demo at [this video](https://www.youtube.com/watch?v=OitgkKTxht4)
+
+7. Configure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in your .env
+
+8. Your `.env` should look like this:
+
+```
+GOOGLE_CLIENT_ID={{ your_google_client_id}}
+GOOGLE_CLIENT_SECRET={{ your_google_client_secret }}
+JWT_SECRET={{ your_jwt_secret }}
+MONGODB_URI=mongodb://user:password@localhost:27018/cantek_nextdoor_mongodb
+SERVER_URL=http://localhost:3000
+```
+
+Creating controller  
 https://docs.nestjs.com/controllers
+
+Google Oauth  
+https://dev.to/chukwutosin_/implement-google-oauth-in-nestjs-using-passport-1j3k
 
 ```
 nest g controller [name]

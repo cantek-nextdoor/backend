@@ -1,29 +1,45 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { AuthService } from '../auth/auth.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private _userService: UserService) {}
+  constructor(
+    private _authService: AuthService,
+    private _userService: UserService,
+  ) {}
 
-  @Get()
-  async findUserByEmail(@Param('id') uuid: string) {
-    console.log('test');
-    // const user = this._authService.signIn('abc@gmail.com', 'password');
-    // console.log('user', user);
-    // return user;
+  @Get('details/:_id')
+  async getUserDetails(@Param('_id') _id: string) {
+    const user = await this._userService.findUserByProps(
+      { _id },
+      { password: 0 },
+    );
+    console.log('user', user);
+    return user;
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('test')
+  async testFunction(@Request() req) {
+    console.log('Only users with valid access_token could access the endpoint');
+    return req.user;
   }
 
   @Get(':email')
   async findOne(@Param('email') email: string) {
     const user = await this._userService.findUser(email);
     return user;
-  }
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this._userService.create(createUserDto);
   }
 
   @Put(':email')
