@@ -14,20 +14,22 @@ export class PostController {
 
 
   @Get("/")
-  async findPostByPostId(@Query('postId') postId: string) {
+  async findPostById(@Query('postId') postId: string) {
     const foundPost =  await this._PostService.findPostsByPostId(postId);
     return foundPost;
   }
 
+  //search ALL post related with one user id
   @Get('/searchPosts/:userid')
-  async findUserAllPost(@Param('userid') userId: string) {
+  async findPostsByUserId(@Param('userid') userId: string) {
     const PostList = await this._PostService.findPostsByUserId(userId);
     return PostList;
   }
 
+  //search ALL post belong to one tag
   @Get('/searchPosts/:tag')
   async findPostsByTag(@Param('tag') tag: string) {
-    const PostList = await this._PostService.findPostByTag(tag);
+    const PostList = await this._PostService.findPostsByTag(tag);
     return PostList;
   }
 

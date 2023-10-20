@@ -3,7 +3,7 @@ export class UpdatePostDto {
   title: string;
   imageUrl: string;
   description: string;
-  tag: string[];
+  tags: string[];
   points: number;
   postedDate: Date;
   dueDate: Date;

@@ -39,7 +39,7 @@ export class PostService {
     }
   }
 
-  async findPostByTag(tagForSerch: string){
+  async findPostsByTag(tagForSerch: string){
     try{
       const posts = await this._postModel.find({ tag: tagForSerch });
       return posts;

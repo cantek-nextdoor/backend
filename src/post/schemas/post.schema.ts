@@ -18,7 +18,7 @@ export class Post {
   description: string;
 
   @Prop({ required: true })
-  tag: string[];
+  tags: string[];
 
   @Prop({ required: true})
   points: number;

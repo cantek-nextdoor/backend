@@ -3,7 +3,7 @@ export class CreatePostDto {
   title: string;
   imageUrl: string;
   description: string;
-  tag: string[];
+  tags: string[];
   points: number;
   userId: string;
   numOfLike: number;
