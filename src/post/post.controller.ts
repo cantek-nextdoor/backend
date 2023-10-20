@@ -15,7 +15,6 @@ export class PostController {
 
   @Get("/")
   async findPostByPostId(@Query('postId') postId: string) {
-    console.log('Find post!: '+ postId);
     const foundPost =  await this._PostService.findPostsByPostId(postId);
     return foundPost;
   }
@@ -23,32 +22,32 @@ export class PostController {
   @Get('/searchPosts/:userid')
   async findUserAllPost(@Param('userid') userId: string) {
     const PostList = await this._PostService.findPostsByUserId(userId);
-    console.log('PostList', PostList);
     return PostList;
   }
 
   @Get('/searchPosts/:tag')
   async findPostsByTag(@Param('tag') tag: string) {
     const PostList = await this._PostService.findPostByTag(tag);
-    console.log('PostList', PostList);
     return PostList;
   }
 
   @Patch('/update')
   async updatePost(@Query('postId') postId: string ,  @Body() UpdatePostDto: UpdatePostDto) {
-    console.log('Update post id: '+postId);
     return this._PostService.updatePost(postId, UpdatePostDto);
   }
 
   @Patch('/liked')
   async addLikedUser(@Query('userId') userId: string , @Query('postId') postId: string) {
-    console.log('Liked post user id: '+userId+' and post id: '+postId);
     return this._PostService.addLikedUser(userId, postId);
+  }
+
+  @Patch('/unliked')
+  async removeLikedUser(@Query('userId') userId: string , @Query('postId') postId: string) {
+    return this._PostService.removeLikedUser(userId, postId);
   }
 
   @Delete('/delete')
   async deletePost(@Query('postId') postId: string) {
-    console.log('Delete post id: '+postId);
     return this._PostService.deletePost(postId);
   }
 

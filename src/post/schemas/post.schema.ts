@@ -18,7 +18,7 @@ export class Post {
   description: string;
 
   @Prop({ required: true })
-  tag: [string];
+  tag: string[];
 
   @Prop({ required: true})
   points: number;
@@ -39,7 +39,7 @@ export class Post {
   completed: boolean;
 
   @Prop()
-  likedUserList: [String];
+  likedUserList: String[];
 
 }
 

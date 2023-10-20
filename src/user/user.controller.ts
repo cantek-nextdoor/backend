@@ -18,7 +18,6 @@ export class UserController {
   @Get(':email')
   async findOne(@Param('email') email: string) {
     const user = await this._userService.findUser(email);
-    console.log('user', user);
     return user;
   }
 

@@ -33,7 +33,6 @@ export class PostService {
   async findPostsByPostId(postId: string) {
     try{
     const posts = await this._postModel.find({ postId: postId });
-    console.log(posts)
     return posts;
     } catch (error) {
       console.log(error);
@@ -43,7 +42,6 @@ export class PostService {
   async findPostByTag(tagForSerch: string){
     try{
       const posts = await this._postModel.find({ tag: tagForSerch });
-      console.log(posts)
       return posts;
       } catch (error) {
         console.log(error);
@@ -57,23 +55,12 @@ export class PostService {
       {postId: postId},
       updatePostDto,
     );
-    console.log(updateResult);
     return updateResult;
     } catch (error) {
     console.log(error);
     }
   }
 
-  // async addLikedUser(userId: string, postId: string) {
-  //   try{
-  //     const posts = await this._postModel.find({ postId: postId }).select("likedUserList").exec();
-  //     const likedUserList = posts.post.likedUserList;
-  //     console.log("Liked User List: ", posts);
-  //   return posts;
-  //   } catch (error) {
-  //   console.log(error);
-  //   }
-  // }
 
   async addLikedUser(userId: string, postId: string) {
     try {
@@ -85,8 +72,6 @@ export class PostService {
       if (post) {
         const likedUsers = post.likedUserList;
         likedUsers.push(userId);
-        console.log("Liked User List: ", likedUsers);
-
         const updateResult =  await 
         this._postModel.updateOne(
           {postId: postId},
@@ -103,22 +88,35 @@ export class PostService {
     }
   }
 
-  // async addLikedUser(userId: string, postId: string) {
-  //   try {
-  //     const post = await this._postModel.findOne({ _id: new Object(postId) }); // Use findOne and ObjectId
-  //     if (post) {
-  //       const likedUserList = post.likedUserList;
-  //       console.log("Liked User List: ", likedUserList);
-  //       return likedUserList;
-  //     } else {
-  //       console.log("Post not found.");
-  //       return null; // or handle the case where the post is not found
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw error;
-  //   }
-  // }
+  async removeLikedUser(userId: string, postId: string) {
+    try {
+      const post = await this._postModel
+        .findOne({ postId: postId })
+        .select("likedUserList")
+        .exec();
+  
+      if (post) {
+        const likedUsers = post.likedUserList;
+        if(likedUsers.includes(userId)) {
+          const updatedList = likedUsers.filter(element => element !== userId);
+          const updateResult =  await 
+          this._postModel.updateOne(
+            {postId: postId},
+            {likedUserList: updatedList},
+          );
+          return updateResult;
+        } else {
+          console.log("user not found.");
+        }
+      } else {
+        console.log("Post not found.");
+      }
+      return null;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
   async deletePost(postId: string) {
     try{
@@ -126,14 +124,10 @@ export class PostService {
     this._postModel.deleteOne(
       {postId: postId}
     );
-    console.log(deleteResult);
     return deleteResult;
     } catch (error) {
     console.log(error);
     }
   }
 
-  // async findAll(): Promise<User[]> {
-  //   return this._userModel.find().exec();
-  // }
 }

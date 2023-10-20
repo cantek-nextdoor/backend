@@ -22,6 +22,9 @@ export class User {
 
   @Prop({ required: true })
   postal_code: string;
+
+  @Prop () 
+  likedPostList: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

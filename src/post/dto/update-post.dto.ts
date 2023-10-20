@@ -3,10 +3,10 @@ export class UpdatePostDto {
   title: string;
   imageUrl: string;
   description: string;
-  tag: [string];
+  tag: string[];
   points: number;
   postedDate: Date;
   dueDate: Date;
   completed: boolean;
-  likedUserList: [string];
+  likedUserList: string[];
 }
