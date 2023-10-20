@@ -1,5 +1,6 @@
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { CatModule } from './cat/cat.module';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
@@ -10,12 +11,11 @@ import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
+    AuthModule,
+    UserModule,
+    CatModule,
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    // AuthModule,
-    CatModule,
-    UserModule,
-    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService, LocationService],

@@ -3,10 +3,15 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+export enum UserAccount {
+  DEFAULT = 'default',
+  GOOGLE = 'google',
+}
+
+@Schema({ timestamps: true, versionKey: false })
 export class User {
-  @Prop()
-  id: string;
+  @Prop({ unique: true })
+  uuid: string;
 
   @Prop()
   display_name: string;
@@ -14,13 +19,34 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({
+    validate: {
+      validator: (v) => {
+        return /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$/.test(v);
+      },
+      message: (v) =>
+        `Password must be at least 8 characters long, contain at least one letter and one number.`,
+    },
+  })
   password: string;
+
+  @Prop({ default: UserAccount.DEFAULT })
+  user_type: UserAccount;
 
   @Prop()
   points: number;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    validate: {
+      validator: (v) => {
+        return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i.test(
+          v,
+        );
+      },
+      message: (v) => `Invalid postal_code ${v.value}`,
+    },
+  })
   postal_code: string;
 }
 
