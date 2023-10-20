@@ -18,6 +18,6 @@ import { LocationModule } from './location/location.module';
     MongooseModule.forRoot(process.env.MONGODB_URI),
   ],
   controllers: [AppController],
-  providers: [AppService, LocationService],
+  providers: [AppService],
 })
 export class AppModule {}
