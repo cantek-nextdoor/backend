@@ -39,7 +39,7 @@ export class Post {
   completed: boolean;
 
   @Prop()
-  likedUserList: String[];
+  likedUserList: string[];
 
 }
 
