@@ -27,15 +27,18 @@ export class AuthService {
   }
 
   async signJwt(user: SignInDto) {
-    const payload = { email: user.email };
+    const userInfo = await this._userService.findUserByProps(
+      { email: user.email },
+      { password: 0 },
+    );
 
     return {
       email: user.email,
-      accessToken: this._jwtService.sign(payload, {
+      accessToken: this._jwtService.sign(userInfo, {
         secret: process.env.JWT_SECRET,
         expiresIn: AUTH_ACCESS_TOKEN_EXPIRY,
       }),
-      refreshToken: this._jwtService.sign(payload, {
+      refreshToken: this._jwtService.sign(userInfo, {
         secret: process.env.JWT_SECRET,
         expiresIn: AUTH_REFRESH_TOKEN_EXPIRY,
       }),

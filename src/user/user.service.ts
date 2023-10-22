@@ -72,7 +72,7 @@ export class UserService {
     filter: Record<string, any>,
     projection?: Record<string, number>,
   ): Promise<User | undefined> {
-    return this._userModel.findOne(filter, projection);
+    return this._userModel.findOne(filter, projection).lean();
   }
 
   async updateUser(updateUserDto: UpdateUserDto) {
