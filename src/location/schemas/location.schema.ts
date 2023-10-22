@@ -6,31 +6,31 @@ export type LocationDocument = HydratedDocument<Location>;
 @Schema()
 export class Location {
   @Prop()
-  id: string;
+  _id: string;
 
   @Prop({ required: true })
-  country_code: string;
+  CountryCode: string;
 
   @Prop({ required: true, unique: true })
-  postal_code: string;
+  PostalCode: string;
 
   @Prop()
-  place: string;
+  Place: string;
   
   @Prop()
-  state: string;
+  State: string;
   
   @Prop()
-  state_code: string;
+  StateCode: string;
   
   @Prop({ required: true })
-  latitude: number;
+  Latitude: number;
   
   @Prop({ required: true })
-  longtitude: number;
+  Longtitude: number;
 
   @Prop()
-  accuracy_type: number;
+  AccuracyType: number;
 }
 
 export const LocationSchema = SchemaFactory.createForClass(Location);
