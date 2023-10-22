@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Redirect,
   Request,
   Response,
   UseGuards,
@@ -32,6 +33,7 @@ export class AuthController {
   async googleAuth() {}
 
   @Get('google/redirect')
+  @Redirect()
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
     let user = req.user;
@@ -48,7 +50,7 @@ export class AuthController {
     }
     const tokenDetails = await this._authService.signJwt(user);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json(user);
+    return { url: process.env.CLIENT_URL ?? 'http://localhost:5173' };
   }
 
   @UseGuards(LocalAuthGuard)
