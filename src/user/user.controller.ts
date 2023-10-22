@@ -38,7 +38,7 @@ export class UserController {
 
   @Get(':email')
   async findOne(@Param('email') email: string) {
-    const user = await this._userService.findUser(email);
+    const user = await this._userService.findUserByProps({email});
     return user;
   }
 

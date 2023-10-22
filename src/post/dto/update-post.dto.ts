@@ -1,3 +1,5 @@
+import { status } from "../status/status";
+
 export class UpdatePostDto {
   postId: string;
   title: string;
@@ -6,7 +8,7 @@ export class UpdatePostDto {
   tags: string[];
   points: number;
   postedDate: Date;
-  dueDate: Date;
-  completed: boolean;
+  eventDate: Date;
+  status: status;
   likedUserList: string[];
 }

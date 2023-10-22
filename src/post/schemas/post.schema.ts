@@ -1,5 +1,6 @@
 import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { status } from '../status/status';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -33,10 +34,10 @@ export class Post {
   postedDate: Date;
 
   @Prop ()
-  dueDate: Date;
+  eventDate: Date;
 
-  @Prop ({required: true })
-  completed: boolean;
+  @Prop ({required: true , default: status.open})
+  status: status;
 
   @Prop()
   likedUserList: string[];
