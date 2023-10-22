@@ -25,6 +25,7 @@ export class UserService {
         postal_code: createUserDto.postal_code.toUpperCase().replace('-', ' '),
         points: 0,
         display_name: createUserDto.email.split('@')[0],
+        likedPostList: [],
       };
 
       const payload = { ...createUserDto, ...defaultUserInfo };
@@ -52,6 +53,7 @@ export class UserService {
         postal_code: 'M5J 1E6', // Union Station postal code
         points: 0,
         display_name: createGoogleUserDto.email.split('@')[0],
+        likedPostList: [],
       };
 
       const payload = { ...createGoogleUserDto, ...defaultUserInfo };
