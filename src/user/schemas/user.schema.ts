@@ -48,6 +48,9 @@ export class User {
     },
   })
   postal_code: string;
+
+  @Prop () 
+  likedPostList: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

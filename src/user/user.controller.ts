@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Put,
   Request,
   UseGuards,
@@ -38,8 +39,7 @@ export class UserController {
 
   @Get(':email')
   async findOne(@Param('email') email: string) {
-    const user = await this._userService.findUserByProps({ email });
-    console.log('user', user);
+    const user = await this._userService.findUserByProps({email});
     return user;
   }
 
@@ -51,4 +51,17 @@ export class UserController {
     await this._userService.updateUser(updateUserDto);
     return updateUserDto;
   }
+
+  @Patch('liked/:postid')
+  async addLikePostId(@Param('postid') postId: string , @Param('userid') userId: string) {
+    const user = await this._userService.addLikedPostId(userId , postId);
+    return user;
+  }
+
+  @Patch('liked/:postid')
+  async removeLikePostId(@Param('postid') postId: string, @Param('userid') userId: string) {
+    const user = await this._userService.removeLikedPostId(userId, postId);
+    return user;
+  }
+
 }
