@@ -11,16 +11,16 @@ export class LocationService {
     private _cacheService: CacheService
   ) {}
 
-  async findLocation(postal_code: string): Promise<Location | undefined> {
+  async FindLocation(postal_code: string): Promise<Location | undefined> {
     return this._locationModel.findOne({ PostalCode: postal_code });
   }
 
-  async getAllLocation(): Promise<Location[]> {
+  async GetAllLocation(): Promise<Location[]> {
     return this._locationModel.find().exec();
   }
 
-  async getNearbyPostalCodes(
-    distance: number,
+  async GetNearbyPostalCodes(
+    distance: number, // in kilometers
     postalCode: string,
   ): Promise<Location[]> {
     const cacheKey = `nearbyPostalCodes:${postalCode}:${distance}`;
@@ -30,19 +30,18 @@ export class LocationService {
       return cachedResult;
     }
 
-    const targetLocation = await this._locationModel.findOne({ PostalCode : postalCode }).exec();
+    const targetLocation = await this._locationModel.findOne({ postalCode : postalCode }).exec();
 
     if (!targetLocation) {
       return []; // if location not found, return blank;
     }
 
-    const allLocations = await this._locationModel.find().exec();
-    const nearbyAreaCodes = allLocations.filter(data => data.PostalCode !== postalCode);
+    const nearbyAreaCodes = await this._locationModel.find({ postalCode : { $ne: postalCode }}).exec();
 
     const result = [];
     nearbyAreaCodes.forEach(item => {
-      if (this.calculateDistance(targetLocation.Latitude, targetLocation.Longtitude, 
-                                 item.Latitude, item.Longtitude) <= distance)
+      if (this.CalculateDistance(targetLocation.latitude, targetLocation.longtitude, 
+                                 item.latitude, item.longtitude) <= distance)
       {
         result.push(item);
       }
@@ -53,15 +52,15 @@ export class LocationService {
     return result;
   }
 
-  calculateDistance(lat1:number, long1:number, lat2:number, long2:number) : number
+  CalculateDistance(lat1:number, long1:number, lat2:number, long2:number) : number
   {
     const radius = 6371.0; // Earth's radius in kilometers
 
     // Convert latitude and longitude from degrees to radians
-    lat1 = this.degreesToRadians(lat1);
-    long1 = this.degreesToRadians(long1);
-    lat2 = this.degreesToRadians(lat2);
-    long2 = this.degreesToRadians(long2);
+    lat1 = this.ConvertDegreesToRadians(lat1);
+    long1 = this.ConvertDegreesToRadians(long1);
+    lat2 = this.ConvertDegreesToRadians(lat2);
+    long2 = this.ConvertDegreesToRadians(long2);
 
     // Haversine formula
     const dlon = long2 - long1;
@@ -79,7 +78,7 @@ export class LocationService {
     return distance;
   }
 
-  private degreesToRadians(degrees: number): number {
+  private ConvertDegreesToRadians(degrees: number): number {
     return (degrees * Math.PI) / 180;
   }
 }

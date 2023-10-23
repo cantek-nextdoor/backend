@@ -9,28 +9,28 @@ export class Location {
   _id: string;
 
   @Prop({ required: true })
-  CountryCode: string;
+  countryCode: string;
 
   @Prop({ required: true, unique: true })
-  PostalCode: string;
+  postalCode: string;
 
   @Prop()
-  Place: string;
+  place: string;
   
   @Prop()
-  State: string;
+  state: string;
   
   @Prop()
-  StateCode: string;
+  stateCode: string;
   
   @Prop({ required: true })
-  Latitude: number;
+  latitude: number;
   
   @Prop({ required: true })
-  Longtitude: number;
+  longtitude: number;
 
   @Prop()
-  AccuracyType: number;
+  accuracyType: number;
 }
 
 export const LocationSchema = SchemaFactory.createForClass(Location);
