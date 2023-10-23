@@ -44,9 +44,9 @@ export class PostController {
   @Patch('/update')
   async updatePost(
     @Query('postId') postId: string,
-    @Body() UpdatePostDto: UpdatePostDto,
+    @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this._PostService.updatePost(postId, UpdatePostDto);
+    return this._PostService.updatePost(postId, updatePostDto);
   }
 
   @Patch('/liked')

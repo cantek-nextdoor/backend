@@ -11,8 +11,8 @@ export class LocationService {
     private _cacheService: CacheService,
   ) {}
 
-  async findLocation(postal_code: string): Promise<Location | undefined> {
-    return this._locationModel.findOne({ PostalCode: postal_code });
+  async findLocation(postalCode: string): Promise<Location | undefined> {
+    return this._locationModel.findOne({ PostalCode: postalCode });
   }
 
   async getAllLocations(): Promise<Location[]> {

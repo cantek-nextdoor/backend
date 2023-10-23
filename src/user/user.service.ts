@@ -20,11 +20,11 @@ export class UserService {
       const encryptedPassword = await bcrypt.hash(createUserDto.password, 10);
       const defaultUserInfo = {
         uuid,
-        user_type: UserAccount.DEFAULT,
+        userType: UserAccount.DEFAULT,
         password: encryptedPassword,
-        postal_code: createUserDto.postal_code.toUpperCase().replace('-', ' '),
+        postalCode: createUserDto.postalCode.toUpperCase().replace('-', ' '),
         points: 0,
-        display_name: createUserDto.email.split('@')[0],
+        displayName: createUserDto.email.split('@')[0],
         likedPostList: [],
       };
 
@@ -49,10 +49,10 @@ export class UserService {
       const uuid = v4();
       const defaultUserInfo = {
         uuid,
-        user_type: UserAccount.GOOGLE,
-        postal_code: 'M5J 1E6', // Union Station postal code
+        userType: UserAccount.GOOGLE,
+        postalCode: 'M5J 1E6', // Union Station postal code
         points: 0,
-        display_name: createGoogleUserDto.email.split('@')[0],
+        displayName: createGoogleUserDto.email.split('@')[0],
         likedPostList: [],
       };
 

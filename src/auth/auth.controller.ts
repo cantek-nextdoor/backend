@@ -41,12 +41,11 @@ export class AuthController {
     const existingUser = await this._userService.findUserByProps({
       email: req.user.email,
     });
-    if (existingUser && existingUser.user_type !== UserAccount.GOOGLE) {
+    if (existingUser && existingUser.userType !== UserAccount.GOOGLE) {
       throw new BadRequestException(
         'Account already exists. Please sign in with your email and password.',
       );
     } else if (!existingUser) {
-      console.log('Creating Google user');
       user = await this._userService.createGoogleUser(req.user);
     }
     const tokenDetails = await this._authService.signJwt(user);
@@ -75,6 +74,6 @@ export class AuthController {
   @Post('refresh')
   async refreshToken(@Request() req, @Response() res) {
     const tokenDetails = await this._authService.refreshToken(req.user);
-    createJsonResponse(res, tokenDetails)
+    createJsonResponse(res, tokenDetails);
   }
 }
