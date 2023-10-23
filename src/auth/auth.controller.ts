@@ -57,10 +57,10 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: SignInDto, @Response() res) {
+  async signIn(@Body() signInDto: SignInDto, @Request() req, @Response() res) {
     const tokenDetails = await this._authService.signJwt(signInDto);
     this._authService.setTokensToCookies(res, tokenDetails);
-    createJsonResponse(res, tokenDetails);
+    createJsonResponse(res, { ...tokenDetails, ...req.user });
   }
 
   @Post('register')
@@ -73,7 +73,8 @@ export class AuthController {
 
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
-  async refreshToken(@Request() req) {
-    return this._authService.refreshToken(req.user);
+  async refreshToken(@Request() req, @Response() res) {
+    const tokenDetails = await this._authService.refreshToken(req.user);
+    createJsonResponse(res, tokenDetails)
   }
 }
