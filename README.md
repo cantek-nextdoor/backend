@@ -31,6 +31,18 @@ openssl rand -base64 60
 6. Generate Google OAuth [here](https://console.cloud.google.com/apis/credentials) to test Google Login
    Watch the first 5 minutes of the demo at [this video](https://www.youtube.com/watch?v=OitgkKTxht4)
 
+```
+Authorized Javascript origins
+http://localhost:3000
+http://localhost:5173
+```
+
+```
+Authorized redirect URIs:
+http://localhost:3000/auth/google/redirect
+http://localhost:5173/auth/google/redirect
+```
+
 7. Configure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in your .env
 
 8. Your `.env` should look like this:
