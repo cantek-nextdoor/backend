@@ -40,7 +40,6 @@ http://localhost:5173
 ```
 Authorized redirect URIs:
 http://localhost:3000/auth/google/redirect
-http://localhost:5173/auth/google/redirect
 ```
 
 7. Configure `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in your .env
@@ -65,6 +64,12 @@ https://dev.to/chukwutosin_/implement-google-oauth-in-nestjs-using-passport-1j3k
 ```
 nest g controller [name]
 ```
+
+Place list of postal codes in mongodb
+
+- Create a postal-code collection
+- Import data using csv file. Use only one: canada.csv, ontario.csv, or toronto.csv (depending on how large you want the
+  scope of the app to be)
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
