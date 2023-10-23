@@ -20,6 +20,7 @@ import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserAccount } from '../user/schemas/user.schema';
 import { UserService } from '../user/user.service';
+import { createJsonResponse } from '../utils';
 
 @Controller('auth')
 export class AuthController {
@@ -59,7 +60,7 @@ export class AuthController {
   async signIn(@Body() signInDto: SignInDto, @Response() res) {
     const tokenDetails = await this._authService.signJwt(signInDto);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json({ success: true, ...tokenDetails });
+    createJsonResponse(res, tokenDetails);
   }
 
   @Post('register')
@@ -67,7 +68,7 @@ export class AuthController {
     const user = await this._userService.createUser(createUserDto);
     const tokenDetails = await this._authService.signJwt(user);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json({ ...tokenDetails, ...user });
+    createJsonResponse(res, { ...tokenDetails, ...user });
   }
 
   @UseGuards(RefreshJwtGuard)
