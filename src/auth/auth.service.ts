@@ -60,10 +60,10 @@ export class AuthService {
   }
 
   setTokensToCookies(res, tokenDetails) {
-    res.cookie('access_token', tokenDetails.accessToken, {
+    res.cookie('accessToken', tokenDetails.accessToken, {
       maxAge: 60 * 1000,
     });
-    res.cookie('refresh_token', tokenDetails.refreshToken, {
+    res.cookie('refreshToken', tokenDetails.refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
