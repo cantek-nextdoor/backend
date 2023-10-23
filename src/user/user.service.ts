@@ -25,6 +25,7 @@ export class UserService {
         postal_code: createUserDto.postal_code.toUpperCase().replace('-', ' '),
         points: 0,
         display_name: createUserDto.email.split('@')[0],
+        likedPostList: [],
       };
 
       const payload = { ...createUserDto, ...defaultUserInfo };
@@ -52,6 +53,7 @@ export class UserService {
         postal_code: 'M5J 1E6', // Union Station postal code
         points: 0,
         display_name: createGoogleUserDto.email.split('@')[0],
+        likedPostList: [],
       };
 
       const payload = { ...createGoogleUserDto, ...defaultUserInfo };
@@ -80,5 +82,63 @@ export class UserService {
       { email: updateUserDto.email },
       updateUserDto,
     );
+  }
+
+  async addLikedPostId(userId: string, postId: string) {
+    console.log("added post id:",postId,"for user: ",userId);
+    try {
+      const user = await this._userModel
+        .findOne({ uuid: userId })
+        .select("likedPostList")
+        .exec();
+  
+      if (user) {
+        const likedPosts = user.likedPostList;
+        likedPosts.push(postId);
+        const updateResult =  await 
+        this._userModel.updateOne(
+          {uuid: userId},
+          {likedPostList: likedPosts},
+        );
+        return updateResult;
+      } else {
+        console.log("User not found.");
+        return null; 
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async removeLikedPostId(userId: string, postId: string) {
+    console.log("Removed post id:",postId,"for user: ",userId);
+    try {
+      const user = await this._userModel
+        .findOne({ uuid: userId })
+        .select("likedPostList")
+        .exec();
+  
+      if (user) {
+        const likedPosts = user.likedPostList;
+        if(likedPosts.includes(postId)) {
+          const updatedList = likedPosts.filter(element => element !== postId);
+          const updateResult =  await 
+          this._userModel.updateOne(
+            {uuid: userId},
+            {likedPostList: updatedList},
+          );
+          return updateResult;
+        } else {
+          console.log("Post not found.");
+        }
+      } else {
+        console.log("User not found.");
+      }
+      return null;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }
