@@ -14,7 +14,7 @@ export class CatController {
 
   @Get('all')
   async findAllPostal() {
-    const result = await this._locService.getAllLocation();
+    const result = await this._locService.getAllLocations();
     return result;
   }
 

@@ -11,15 +11,15 @@ export class LocationService {
     private _cacheService: CacheService
   ) {}
 
-  async FindLocation(postal_code: string): Promise<Location | undefined> {
+  async findLocation(postal_code: string): Promise<Location | undefined> {
     return this._locationModel.findOne({ PostalCode: postal_code });
   }
 
-  async GetAllLocation(): Promise<Location[]> {
+  async getAllLocations(): Promise<Location[]> {
     return this._locationModel.find().exec();
   }
 
-  async GetNearbyPostalCodes(
+  async getNearbyPostalCodes(
     distance: number, // in kilometers
     postalCode: string,
   ): Promise<Location[]> {
@@ -40,7 +40,7 @@ export class LocationService {
 
     const result = [];
     nearbyAreaCodes.forEach(item => {
-      if (this.CalculateDistance(targetLocation.latitude, targetLocation.longtitude, 
+      if (this.calculateDistance(targetLocation.latitude, targetLocation.longtitude, 
                                  item.latitude, item.longtitude) <= distance)
       {
         result.push(item);
@@ -52,15 +52,15 @@ export class LocationService {
     return result;
   }
 
-  CalculateDistance(lat1:number, long1:number, lat2:number, long2:number) : number
+  calculateDistance(lat1:number, long1:number, lat2:number, long2:number) : number
   {
     const radius = 6371.0; // Earth's radius in kilometers
 
     // Convert latitude and longitude from degrees to radians
-    lat1 = this.ConvertDegreesToRadians(lat1);
-    long1 = this.ConvertDegreesToRadians(long1);
-    lat2 = this.ConvertDegreesToRadians(lat2);
-    long2 = this.ConvertDegreesToRadians(long2);
+    lat1 = this.convertDegreesToRadians(lat1);
+    long1 = this.convertDegreesToRadians(long1);
+    lat2 = this.convertDegreesToRadians(lat2);
+    long2 = this.convertDegreesToRadians(long2);
 
     // Haversine formula
     const dlon = long2 - long1;
@@ -78,7 +78,7 @@ export class LocationService {
     return distance;
   }
 
-  private ConvertDegreesToRadians(degrees: number): number {
+  private convertDegreesToRadians(degrees: number): number {
     return (degrees * Math.PI) / 180;
   }
 }
