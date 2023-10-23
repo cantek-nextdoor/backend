@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Put,
   Request,
   UseGuards,
@@ -50,4 +51,17 @@ export class UserController {
     await this._userService.updateUser(updateUserDto);
     return updateUserDto;
   }
+
+  @Patch('liked/:postid')
+  async addLikePostId(@Param('postid') postId: string , @Param('userid') userId: string) {
+    const user = await this._userService.addLikedPostId(userId , postId);
+    return user;
+  }
+
+  @Patch('liked/:postid')
+  async removeLikePostId(@Param('postid') postId: string, @Param('userid') userId: string) {
+    const user = await this._userService.removeLikedPostId(userId, postId);
+    return user;
+  }
+
 }

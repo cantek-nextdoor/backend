@@ -1,5 +1,5 @@
 export enum status {
-    open,
-    completed,
-    withdrew
+    open = "OPEN",
+    completed = "COMPLETED",
+    withdrew = "WITHDREW",
 }
