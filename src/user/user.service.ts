@@ -78,10 +78,28 @@ export class UserService {
   }
 
   async getRankedUsers(): Promise<User[] | undefined> {
-    return await this._userModel.aggregate([
-      { $project: { uuid: 1, displayName: 1, points: 1, postalCode: 1 } },
+    return this._userModel.aggregate([
       { $sort: { points: -1 } },
       { $limit: 20 },
+      {
+        $group: {
+          _id: null,
+          users: {
+            $push: {
+              uuid: '$uuid',
+              displayName: '$displayName',
+              points: '$points',
+              postalCode: '$postalCode',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          users: 1,
+        },
+      },
     ]);
   }
 
