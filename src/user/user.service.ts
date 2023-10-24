@@ -77,6 +77,32 @@ export class UserService {
     return this._userModel.findOne(filter, projection).lean();
   }
 
+  async getRankedUsers(): Promise<User[] | undefined> {
+    return this._userModel.aggregate([
+      { $sort: { points: -1 } },
+      { $limit: 20 },
+      {
+        $group: {
+          _id: null,
+          users: {
+            $push: {
+              uuid: '$uuid',
+              displayName: '$displayName',
+              points: '$points',
+              postalCode: '$postalCode',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          users: 1,
+        },
+      },
+    ]);
+  }
+
   async updateUser(updateUserDto: UpdateUserDto) {
     return this._userModel.updateOne(
       { email: updateUserDto.email },
