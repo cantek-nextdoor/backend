@@ -14,7 +14,7 @@ export class User {
   uuid: string;
 
   @Prop()
-  display_name: string;
+  displayName: string;
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -31,7 +31,7 @@ export class User {
   password: string;
 
   @Prop({ default: UserAccount.DEFAULT })
-  user_type: UserAccount;
+  userType: UserAccount;
 
   @Prop()
   points: number;
@@ -44,12 +44,12 @@ export class User {
           v,
         );
       },
-      message: (v) => `Invalid postal_code ${v.value}`,
+      message: (v) => `Invalid postalCode ${v.value}`,
     },
   })
-  postal_code: string;
+  postalCode: string;
 
-  @Prop () 
+  @Prop()
   likedPostList: string[];
 }
 

@@ -1,7 +1,6 @@
-export class UpdateUserDto {
-  display_name: string;
-  email: string;
-  password: string;
+import { CreateUserDto } from './create-user.dto';
+
+export class UpdateUserDto extends CreateUserDto {
+  displayName: string;
   points: number;
-  postal_code: string;
 }

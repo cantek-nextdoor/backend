@@ -1,4 +1,4 @@
-import { status } from "../status/status";
+import { status } from '../status/status';
 
 export class UpdatePostDto {
   postId: string;

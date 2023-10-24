@@ -6,10 +6,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Location.name, schema: LocationSchema }]),
+    MongooseModule.forFeature([
+      { name: Location.name, schema: LocationSchema },
+    ]),
     CacheManagerModule,
   ],
   providers: [LocationService],
-  exports: [LocationService]
+  exports: [LocationService],
 })
 export class LocationModule {}

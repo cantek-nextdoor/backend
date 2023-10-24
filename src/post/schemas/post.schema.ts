@@ -21,27 +21,26 @@ export class Post {
   @Prop({ required: true })
   tags: string[];
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   points: number;
 
   @Prop({ required: true })
   userId: string;
 
-  @Prop({required: true })
+  @Prop({ required: true })
   numOfLike: number;
 
-  @Prop ({required: true })
+  @Prop({ required: true })
   postedDate: Date;
 
-  @Prop ()
+  @Prop()
   eventDate: Date;
 
-  @Prop ({required: true , default: status.open})
+  @Prop({ required: true, default: status.open })
   status: status;
 
   @Prop()
   likedUserList: string[];
-
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

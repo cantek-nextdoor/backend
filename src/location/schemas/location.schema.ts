@@ -16,16 +16,16 @@ export class Location {
 
   @Prop()
   place: string;
-  
+
   @Prop()
   state: string;
-  
+
   @Prop()
   stateCode: string;
-  
+
   @Prop({ required: true })
   latitude: number;
-  
+
   @Prop({ required: true })
   longtitude: number;
 

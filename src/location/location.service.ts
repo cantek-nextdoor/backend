@@ -8,11 +8,11 @@ import { Model } from 'mongoose';
 export class LocationService {
   constructor(
     @InjectModel(Location.name) private _locationModel: Model<LocationDocument>,
-    private _cacheService: CacheService
+    private _cacheService: CacheService,
   ) {}
 
-  async findLocation(postal_code: string): Promise<Location | undefined> {
-    return this._locationModel.findOne({ PostalCode: postal_code });
+  async findLocation(postalCode: string): Promise<Location | undefined> {
+    return this._locationModel.findOne({ PostalCode: postalCode });
   }
 
   async getAllLocations(): Promise<Location[]> {
@@ -30,19 +30,28 @@ export class LocationService {
       return cachedResult;
     }
 
-    const targetLocation = await this._locationModel.findOne({ postalCode : postalCode }).exec();
+    const targetLocation = await this._locationModel
+      .findOne({ postalCode: postalCode })
+      .exec();
 
     if (!targetLocation) {
       return []; // if location not found, return blank;
     }
 
-    const nearbyAreaCodes = await this._locationModel.find({ postalCode : { $ne: postalCode }}).exec();
+    const nearbyAreaCodes = await this._locationModel
+      .find({ postalCode: { $ne: postalCode } })
+      .exec();
 
     const result = [];
-    nearbyAreaCodes.forEach(item => {
-      if (this.calculateDistance(targetLocation.latitude, targetLocation.longtitude, 
-                                 item.latitude, item.longtitude) <= distance)
-      {
+    nearbyAreaCodes.forEach((item) => {
+      if (
+        this.calculateDistance(
+          targetLocation.latitude,
+          targetLocation.longtitude,
+          item.latitude,
+          item.longtitude,
+        ) <= distance
+      ) {
         result.push(item);
       }
     });
@@ -52,8 +61,12 @@ export class LocationService {
     return result;
   }
 
-  calculateDistance(lat1:number, long1:number, lat2:number, long2:number) : number
-  {
+  calculateDistance(
+    lat1: number,
+    long1: number,
+    lat2: number,
+    long2: number,
+  ): number {
     const radius = 6371.0; // Earth's radius in kilometers
 
     // Convert latitude and longitude from degrees to radians
@@ -82,4 +95,3 @@ export class LocationService {
     return (degrees * Math.PI) / 180;
   }
 }
-
