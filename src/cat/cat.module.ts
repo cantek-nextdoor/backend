@@ -4,5 +4,6 @@ import { Module, forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [forwardRef(() => LocationModule)],
-  controllers: [CatController],})
+  controllers: [CatController],
+})
 export class CatModule {}

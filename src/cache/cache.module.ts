@@ -12,6 +12,6 @@ import { CacheService } from './cache.service';
     }),
   ],
   providers: [CacheService],
-  exports: [CacheService]
+  exports: [CacheService],
 })
 export class CacheManagerModule {}

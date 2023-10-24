@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('post')
 export class PostController {
@@ -12,10 +21,9 @@ export class PostController {
     return this._PostService.create(createPostDto);
   }
 
-
-  @Get("/")
+  @Get('/')
   async findPostById(@Query('postId') postId: string) {
-    const foundPost =  await this._PostService.findPostsByPostId(postId);
+    const foundPost = await this._PostService.findPostsByPostId(postId);
     return foundPost;
   }
 
@@ -34,17 +42,26 @@ export class PostController {
   }
 
   @Patch('/update')
-  async updatePost(@Query('postId') postId: string ,  @Body() UpdatePostDto: UpdatePostDto) {
-    return this._PostService.updatePost(postId, UpdatePostDto);
+  async updatePost(
+    @Query('postId') postId: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this._PostService.updatePost(postId, updatePostDto);
   }
 
   @Patch('/liked')
-  async addLikedUser(@Query('userId') userId: string , @Query('postId') postId: string) {
+  async addLikedUser(
+    @Query('userId') userId: string,
+    @Query('postId') postId: string,
+  ) {
     return this._PostService.addLikedUser(userId, postId);
   }
 
   @Patch('/unliked')
-  async removeLikedUser(@Query('userId') userId: string , @Query('postId') postId: string) {
+  async removeLikedUser(
+    @Query('userId') userId: string,
+    @Query('postId') postId: string,
+  ) {
     return this._PostService.removeLikedUser(userId, postId);
   }
 
@@ -52,5 +69,4 @@ export class PostController {
   async deletePost(@Query('postId') postId: string) {
     return this._PostService.deletePost(postId);
   }
-
 }

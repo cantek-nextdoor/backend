@@ -7,8 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { LocationModule } from './location/location.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
-import { PostModule } from './post/post.module'
 
 @Module({
   imports: [
@@ -22,6 +22,6 @@ import { PostModule } from './post/post.module'
     PostModule,
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService],
 })
 export class AppModule {}

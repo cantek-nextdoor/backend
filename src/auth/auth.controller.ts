@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Redirect,
   Request,
   Response,
   UseGuards,
@@ -19,6 +20,7 @@ import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserAccount } from '../user/schemas/user.schema';
 import { UserService } from '../user/user.service';
+import { createJsonResponse } from '../utils';
 
 @Controller('auth')
 export class AuthController {
@@ -32,32 +34,32 @@ export class AuthController {
   async googleAuth() {}
 
   @Get('google/redirect')
+  @Redirect()
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
     let user = req.user;
     const existingUser = await this._userService.findUserByProps({
       email: req.user.email,
     });
-    if (existingUser && existingUser.user_type !== UserAccount.GOOGLE) {
+    if (existingUser && existingUser.userType !== UserAccount.GOOGLE) {
       throw new BadRequestException(
         'Account already exists. Please sign in with your email and password.',
       );
     } else if (!existingUser) {
-      console.log('Creating Google user');
       user = await this._userService.createGoogleUser(req.user);
     }
     const tokenDetails = await this._authService.signJwt(user);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json(user);
+    return { url: process.env.CLIENT_URL ?? 'http://localhost:5173' };
   }
 
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInDto: SignInDto, @Response() res) {
+  async signIn(@Body() signInDto: SignInDto, @Request() req, @Response() res) {
     const tokenDetails = await this._authService.signJwt(signInDto);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json({ success: true, ...tokenDetails });
+    createJsonResponse(res, { ...tokenDetails, ...req.user });
   }
 
   @Post('register')
@@ -65,12 +67,13 @@ export class AuthController {
     const user = await this._userService.createUser(createUserDto);
     const tokenDetails = await this._authService.signJwt(user);
     this._authService.setTokensToCookies(res, tokenDetails);
-    res.json({ ...tokenDetails, ...user });
+    createJsonResponse(res, { ...tokenDetails, ...user });
   }
 
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
-  async refreshToken(@Request() req) {
-    return this._authService.refreshToken(req.user);
+  async refreshToken(@Request() req, @Response() res) {
+    const tokenDetails = await this._authService.refreshToken(req.user);
+    createJsonResponse(res, tokenDetails);
   }
 }
