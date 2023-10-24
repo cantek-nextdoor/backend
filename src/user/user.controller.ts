@@ -31,6 +31,12 @@ export class UserController {
     createJsonResponse(res, user);
   }
 
+  @Get('ranking')
+  async getRankedUsers(@Response() res) {
+    const user = await this._userService.getRankedUsers();
+    createJsonResponse(res, user);
+  }
+
   @UseGuards(JwtGuard)
   @Get('test')
   async testFunction(@Request() req, @Response() res) {
