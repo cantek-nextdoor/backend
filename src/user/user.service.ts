@@ -20,11 +20,11 @@ export class UserService {
       const encryptedPassword = await bcrypt.hash(createUserDto.password, 10);
       const defaultUserInfo = {
         uuid,
-        user_type: UserAccount.DEFAULT,
+        userType: UserAccount.DEFAULT,
         password: encryptedPassword,
-        postal_code: createUserDto.postal_code.toUpperCase().replace('-', ' '),
+        postalCode: createUserDto.postalCode.toUpperCase().replace('-', ' '),
         points: 0,
-        display_name: createUserDto.email.split('@')[0],
+        displayName: createUserDto.email.split('@')[0],
         likedPostList: [],
       };
 
@@ -49,10 +49,10 @@ export class UserService {
       const uuid = v4();
       const defaultUserInfo = {
         uuid,
-        user_type: UserAccount.GOOGLE,
-        postal_code: 'M5J 1E6', // Union Station postal code
+        userType: UserAccount.GOOGLE,
+        postalCode: 'M5J 1E6', // Union Station postal code
         points: 0,
-        display_name: createGoogleUserDto.email.split('@')[0],
+        displayName: createGoogleUserDto.email.split('@')[0],
         likedPostList: [],
       };
 
@@ -74,7 +74,33 @@ export class UserService {
     filter: Record<string, any>,
     projection?: Record<string, number>,
   ): Promise<User | undefined> {
-    return this._userModel.findOne(filter, projection);
+    return this._userModel.findOne(filter, projection).lean();
+  }
+
+  async getRankedUsers(): Promise<User[] | undefined> {
+    return this._userModel.aggregate([
+      { $sort: { points: -1 } },
+      { $limit: 20 },
+      {
+        $group: {
+          _id: null,
+          users: {
+            $push: {
+              uuid: '$uuid',
+              displayName: '$displayName',
+              points: '$points',
+              postalCode: '$postalCode',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          users: 1,
+        },
+      },
+    ]);
   }
 
   async updateUser(updateUserDto: UpdateUserDto) {
@@ -85,25 +111,24 @@ export class UserService {
   }
 
   async addLikedPostId(userId: string, postId: string) {
-    console.log("added post id:",postId,"for user: ",userId);
+    console.log('added post id:', postId, 'for user: ', userId);
     try {
       const user = await this._userModel
         .findOne({ uuid: userId })
-        .select("likedPostList")
+        .select('likedPostList')
         .exec();
-  
+
       if (user) {
         const likedPosts = user.likedPostList;
         likedPosts.push(postId);
-        const updateResult =  await 
-        this._userModel.updateOne(
-          {uuid: userId},
-          {likedPostList: likedPosts},
+        const updateResult = await this._userModel.updateOne(
+          { uuid: userId },
+          { likedPostList: likedPosts },
         );
         return updateResult;
       } else {
-        console.log("User not found.");
-        return null; 
+        console.log('User not found.');
+        return null;
       }
     } catch (error) {
       console.error(error);
@@ -112,28 +137,29 @@ export class UserService {
   }
 
   async removeLikedPostId(userId: string, postId: string) {
-    console.log("Removed post id:",postId,"for user: ",userId);
+    console.log('Removed post id:', postId, 'for user: ', userId);
     try {
       const user = await this._userModel
         .findOne({ uuid: userId })
-        .select("likedPostList")
+        .select('likedPostList')
         .exec();
-  
+
       if (user) {
         const likedPosts = user.likedPostList;
-        if(likedPosts.includes(postId)) {
-          const updatedList = likedPosts.filter(element => element !== postId);
-          const updateResult =  await 
-          this._userModel.updateOne(
-            {uuid: userId},
-            {likedPostList: updatedList},
+        if (likedPosts.includes(postId)) {
+          const updatedList = likedPosts.filter(
+            (element) => element !== postId,
+          );
+          const updateResult = await this._userModel.updateOne(
+            { uuid: userId },
+            { likedPostList: updatedList },
           );
           return updateResult;
         } else {
-          console.log("Post not found.");
+          console.log('Post not found.');
         }
       } else {
-        console.log("User not found.");
+        console.log('User not found.');
       }
       return null;
     } catch (error) {

@@ -13,6 +13,7 @@ import {
 import { JwtGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { createJsonResponse } from '../utils';
 
 @Controller('user')
 export class UserController {
@@ -30,19 +31,27 @@ export class UserController {
     console.log('user', user);
     // return user;
     res.json(user);
+
+//     createJsonResponse(res, user);
+  }
+
+  @Get('ranking')
+  async getRankedUsers(@Response() res) {
+    const users = (await this._userService.getRankedUsers())[0];
+    createJsonResponse(res, users);
+    development
   }
 
   @UseGuards(JwtGuard)
   @Get('test')
-  async testFunction(@Request() req) {
-    console.log('Only users with valid access_token could access the endpoint');
-    return req.user;
+  async testFunction(@Request() req, @Response() res) {
+    createJsonResponse(res, req.user);
   }
 
   @Get(':email')
-  async findOne(@Param('email') email: string) {
-    const user = await this._userService.findUserByProps({email});
-    return user;
+  async findOne(@Param('email') email: string, @Response() res) {
+    const user = await this._userService.findUserByProps({ email });
+    createJsonResponse(res, user);
   }
 
   @Put(':email')
@@ -55,15 +64,20 @@ export class UserController {
   }
 
   @Patch('liked/:postid')
-  async addLikePostId(@Param('postid') postId: string , @Param('userid') userId: string) {
-    const user = await this._userService.addLikedPostId(userId , postId);
+  async addLikePostId(
+    @Param('postid') postId: string,
+    @Param('userid') userId: string,
+  ) {
+    const user = await this._userService.addLikedPostId(userId, postId);
     return user;
   }
 
   @Patch('liked/:postid')
-  async removeLikePostId(@Param('postid') postId: string, @Param('userid') userId: string) {
+  async removeLikePostId(
+    @Param('postid') postId: string,
+    @Param('userid') userId: string,
+  ) {
     const user = await this._userService.removeLikedPostId(userId, postId);
     return user;
   }
-
 }
