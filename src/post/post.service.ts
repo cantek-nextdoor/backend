@@ -21,6 +21,19 @@ export class PostService {
     return createdPost;
   }
 
+  async fetchPosts() {
+    try{
+    // Use the model to find all records, limit the result to 50, and sort by date in descending order
+    return this._postModel
+      .find()
+      .limit(50)
+      .sort({ postedDate: -1 }) // -1 for descending order, 1 for ascending order
+      .exec();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async findPostsByUserId(userID: string) {
     try{
     const posts = await this._postModel.find({ userId: userID });

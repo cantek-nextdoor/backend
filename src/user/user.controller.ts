@@ -21,9 +21,9 @@ export class UserController {
   ) {}
 
   @Get('details/:_id')
-  async getUserDetails(@Param('_id') _id: string) {
+  async getUserDetails(@Param('_id') uuid: string) {
     const user = await this._userService.findUserByProps(
-      { _id },
+      { uuid },
       { password: 0 },
     );
     console.log('user', user);
