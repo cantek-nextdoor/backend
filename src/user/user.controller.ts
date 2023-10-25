@@ -7,6 +7,7 @@ import {
   Patch,
   Put,
   Request,
+  Response,
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from '../auth/guards/jwt-auth.guard';
@@ -21,13 +22,14 @@ export class UserController {
   ) {}
 
   @Get('details/:_id')
-  async getUserDetails(@Param('_id') uuid: string) {
+  async getUserDetails(@Param('_id') uuid: string , @Response() res) {
     const user = await this._userService.findUserByProps(
       { uuid },
       { password: 0 },
     );
     console.log('user', user);
-    return user;
+    // return user;
+    res.json(user);
   }
 
   @UseGuards(JwtGuard)
