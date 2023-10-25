@@ -20,7 +20,7 @@ export class PostController {
   }
 
   //search ALL post related with one user id
-  @Get('/searchPosts/all')
+  @Get('/all')
   async fetchPosts() {
     const PostList = await this._PostService.fetchPosts();
     return PostList;
