@@ -105,7 +105,7 @@ export class UserService {
 
   async updateUser(updateUserDto: UpdateUserDto) {
     return this._userModel.updateOne(
-      { email: updateUserDto.email },
+      { uuid: updateUserDto.uuid },
       updateUserDto,
     );
   }
