@@ -62,26 +62,26 @@ export class PostService {
     }
   }
 
-  async findPostsByCategory(categoryForSerch: category) {
+  async findPostsByCategory(categoryForSearch: category) {
     try {
-      const posts = await this._postModel.find({ categories: categoryForSerch });
+      const posts = await this._postModel.find({ categories: categoryForSearch });
       return posts;
     } catch (error) {
       console.log(error);
     }
   }
   
-  async findPostsByPostalCode(postalCodeForSerch: string) {
+  async findPostsByPostalCode(postalCodeForSearch: string) {
     try {
-      const posts = await this._postModel.find({ PostalCode: postalCodeForSerch });
+      const posts = await this._postModel.find({ PostalCode: postalCodeForSearch });
       return posts;
     } catch (error) {
       console.log(error);
     }
   } 
 
-  async searchPostsByTitle(titleForSerch: string) {
-    const regex = new RegExp(titleForSerch, 'i'); // 'i' makes the search case-insensitive
+  async searchPostsByTitle(titleForSearch: string) {
+    const regex = new RegExp(titleForSearch, 'i'); // 'i' makes the search case-insensitive
     try {
     const posts = await this._postModel.find({ title: { $regex: regex } }).exec();
     return posts;
