@@ -44,7 +44,7 @@ export class Post {
   latitude: number;
 
   @Prop()
-  longtitude: number;
+  longitude: number;
 
   @Prop({ required: true })
   categories: category;

@@ -14,7 +14,7 @@ export class CreatePostDto {
   status: status;
   likedUserList: string[];
   latitude: number;
-  longtitude: number;
+  longitude: number;
   categories: category;
   eventDateAndTime: Date;
   postalCode: string; 
