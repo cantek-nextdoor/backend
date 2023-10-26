@@ -77,10 +77,10 @@ export class UserService {
     return this._userModel.findOne(filter, projection).lean();
   }
 
-  async getRankedUsers(): Promise<User[] | undefined> {
+  async getTopTenRankedUsers(): Promise<User[] | undefined> {
     return this._userModel.aggregate([
       { $sort: { points: -1 } },
-      { $limit: 20 },
+      { $limit: 10 },
       {
         $group: {
           _id: null,
@@ -101,6 +101,13 @@ export class UserService {
         },
       },
     ]);
+  }
+
+  async getRankedUsersPosition(userId: string): Promise<number> {
+    const sortedUsers = await this._userModel.find().sort({ points: -1 }).exec();
+    const specificUser = sortedUsers.find(user => user.uuid.toString() === userId);
+    const userRankingPosition = sortedUsers.indexOf(specificUser);
+    return userRankingPosition + 1;
   }
 
   async updateUser(updateUserDto: UpdateUserDto) {

@@ -53,9 +53,9 @@ export class PostService {
     }
   }
 
-  async findPostsByTag(tagForSerch: string) {
+  async findPostsByTag(tagForSearch: string) {
     try {
-      const posts = await this._postModel.find({ tags: tagForSerch });
+      const posts = await this._postModel.find({ tag: tagForSearch });
       return posts;
     } catch (error) {
       console.log(error);
