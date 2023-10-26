@@ -17,7 +17,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: any) {
+  async validate(req, payload: any) {
     return payload;
   }
 }
