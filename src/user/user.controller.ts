@@ -28,21 +28,18 @@ export class UserController {
       { uuid },
       { password: 0 },
     );
-    console.log('user', user);
     createJsonResponse(res, user);
   }
 
   @Get('ranking/top10')
   async getTopTenRankedUser(@Response() res) {
     const users = (await this._userService.getTopTenRankedUsers())[0];
-    console.log("user: ",users);
     createJsonResponse(res, users);
   }
   
   @Get('ranking/:userid')
   async getRankedUsersPosition(@Param('userid') userid : string, @Response() res) {
     const userPosition = (await this._userService.getRankedUsersPosition(userid));
-    console.log("userPosition: ",userPosition);
     createJsonResponse(res, userPosition);
   }
 
