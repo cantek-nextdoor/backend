@@ -13,4 +13,5 @@ export class CreatePostDto {
   eventDate: Date;
   status: status;
   likedUserList: string[];
+  category: string;
 }

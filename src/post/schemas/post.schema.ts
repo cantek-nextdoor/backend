@@ -41,6 +41,9 @@ export class Post {
 
   @Prop()
   likedUserList: string[];
+
+  @Prop()
+  category: string
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
