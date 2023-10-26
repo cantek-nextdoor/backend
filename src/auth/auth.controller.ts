@@ -74,6 +74,9 @@ export class AuthController {
   @Post('refresh')
   async refreshToken(@Request() req, @Response() res) {
     const tokenDetails = await this._authService.refreshToken(req.user);
+    res.cookie('accessToken', tokenDetails.accessToken, {
+      maxAge: 60 * 1000,
+    });
     createJsonResponse(res, tokenDetails);
   }
 }

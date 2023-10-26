@@ -23,12 +23,16 @@ export class UserController {
   ) {}
 
   @Get('details/:_id')
-  async getUserDetails(@Param('_id') _id: string, @Response() res) {
+  async getUserDetails(@Param('_id') uuid: string , @Response() res) {
     const user = await this._userService.findUserByProps(
-      { _id },
+      { uuid },
       { password: 0 },
     );
-    createJsonResponse(res, user);
+    console.log('user', user);
+    // return user;
+    res.json(user);
+
+//     createJsonResponse(res, user);
   }
 
   @Get('ranking')

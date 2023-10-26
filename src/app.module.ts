@@ -8,6 +8,7 @@ import { LocationModule } from './location/location.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostModule } from './post/post.module';
+import { TransactionModule } from './transaction/transaction.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { UserModule } from './user/user.module';
     MongooseModule.forRoot(process.env.MONGODB_URI),
     CacheManagerModule,
     PostModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

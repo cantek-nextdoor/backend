@@ -28,6 +28,13 @@ export class PostController {
   }
 
   //search ALL post related with one user id
+  @Get('/all')
+  async fetchPosts() {
+    const PostList = await this._PostService.fetchPosts();
+    return PostList;
+  }
+
+  //search ALL post related with one user id
   @Get('/searchPosts/:userid')
   async findPostsByUserId(@Param('userid') userId: string) {
     const PostList = await this._PostService.findPostsByUserId(userId);
