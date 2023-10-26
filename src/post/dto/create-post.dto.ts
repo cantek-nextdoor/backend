@@ -1,5 +1,5 @@
 import { status } from '../status/status';
-import { category } from '../status/status copy';
+import { category } from '../status/categories';
 
 export class CreatePostDto {
   postId: string;

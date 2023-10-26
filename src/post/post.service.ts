@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { v4 as uuid } from 'uuid';
-import { category } from './status/status copy';
+import { category } from './status/categories';
 
 @Injectable()
 export class PostService {

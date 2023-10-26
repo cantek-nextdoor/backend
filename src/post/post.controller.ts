@@ -11,7 +11,7 @@ import {
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { category } from './status/status copy';
+import { category } from './status/categories';
 
 @Controller('post')
 export class PostController {
