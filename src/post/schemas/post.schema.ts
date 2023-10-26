@@ -1,6 +1,7 @@
 import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { status } from '../status/status';
+import { category } from '../status/status copy';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -13,7 +14,7 @@ export class Post {
   title: string;
 
   @Prop({ required: true })
-  imageUrl: string;
+  imageUrl: string[];
 
   @Prop({ required: true })
   description: string;
@@ -33,14 +34,26 @@ export class Post {
   @Prop({ required: true })
   postedDate: Date;
 
-  @Prop()
-  eventDate: Date;
-
   @Prop({ required: true, default: status.open })
   status: status;
 
-  @Prop()
+  @Prop({type:[String] , default: []})
   likedUserList: string[];
+
+  @Prop()
+  latitude: number;
+
+  @Prop()
+  longtitude: number;
+
+  @Prop({ required: true })
+  categories: category;
+
+  @Prop()
+  eventDateAndTime: Date;
+
+  @Prop()
+  postalCode: string;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

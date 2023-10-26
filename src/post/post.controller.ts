@@ -11,6 +11,7 @@ import {
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { category } from './status/status copy';
 
 @Controller('post')
 export class PostController {
@@ -27,26 +28,42 @@ export class PostController {
     return foundPost;
   }
 
-  //search ALL post related with one user id
+//fetch 50 recent posts
   @Get('/all')
   async fetchPosts() {
     const PostList = await this._PostService.fetchPosts();
     return PostList;
   }
 
-  //search ALL post related with one user id
   @Get('/searchPosts/:userid')
   async findPostsByUserId(@Param('userid') userId: string) {
     const PostList = await this._PostService.findPostsByUserId(userId);
     return PostList;
   }
 
-  //search ALL post belong to one tag
-  @Get('/searchPosts/:tag')
+  @Get('/searchPosts/tag/:tag')
   async findPostsByTag(@Param('tag') tag: string) {
     const PostList = await this._PostService.findPostsByTag(tag);
     return PostList;
   }
+
+  @Get('/searchPosts/category/:category')
+   async findPostsByCategory(@Param('category') category: category) {
+    const PostList = await this._PostService.findPostsByCategory(category);
+    return PostList;
+  }
+
+  @Get('/searchPosts/postalcode/:postalcode')
+  async findPostsByPostalCode(@Param('postalcode') PostalCode: string) {
+   const PostList = await this._PostService.findPostsByPostalCode(PostalCode);
+   return PostList;
+ }
+
+  @Get('/searchPosts/title/:title')
+  async searchPostsByTitle(@Param('title') Title: string) {
+   const posts = await this._PostService.searchPostsByTitle(Title);
+   return posts;
+ }
 
   @Patch('/update')
   async updatePost(

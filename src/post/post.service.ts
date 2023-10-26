@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { v4 as uuid } from 'uuid';
+import { category } from './status/status copy';
 
 @Injectable()
 export class PostService {
@@ -54,12 +55,40 @@ export class PostService {
 
   async findPostsByTag(tagForSerch: string) {
     try {
-      const posts = await this._postModel.find({ tag: tagForSerch });
+      const posts = await this._postModel.find({ tags: tagForSerch });
       return posts;
     } catch (error) {
       console.log(error);
     }
   }
+
+  async findPostsByCategory(categoryForSerch: category) {
+    try {
+      const posts = await this._postModel.find({ categories: categoryForSerch });
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  async findPostsByPostalCode(postalCodeForSerch: string) {
+    try {
+      const posts = await this._postModel.find({ PostalCode: postalCodeForSerch });
+      return posts;
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
+  async searchPostsByTitle(titleForSerch: string) {
+    const regex = new RegExp(titleForSerch, 'i'); // 'i' makes the search case-insensitive
+    try {
+    const posts = await this._postModel.find({ title: { $regex: regex } }).exec();
+    return posts;
+    } catch (error) {
+    console.log(error);
+    }
+  } 
 
   async updatePost(postId: string, updatePostDto: UpdatePostDto) {
     try {
