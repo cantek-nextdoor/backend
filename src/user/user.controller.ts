@@ -29,16 +29,21 @@ export class UserController {
       { password: 0 },
     );
     console.log('user', user);
-    // return user;
-    res.json(user);
-
-//     createJsonResponse(res, user);
+    createJsonResponse(res, user);
   }
 
-  @Get('ranking')
-  async getRankedUsers(@Response() res) {
-    const users = (await this._userService.getRankedUsers())[0];
+  @Get('ranking/top10')
+  async getTopTenRankedUser(@Response() res) {
+    const users = (await this._userService.getTopTenRankedUsers())[0];
+    console.log("user: ",users);
     createJsonResponse(res, users);
+  }
+  
+  @Get('ranking/:userid')
+  async getRankedUsersPosition(@Param('userid') userid : string, @Response() res) {
+    const userPosition = (await this._userService.getRankedUsersPosition(userid));
+    console.log("userPosition: ",userPosition);
+    createJsonResponse(res, userPosition);
   }
 
   @UseGuards(JwtGuard)
