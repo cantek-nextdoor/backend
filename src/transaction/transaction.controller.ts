@@ -118,11 +118,18 @@ export class TransactionController {
       receiver = user;
     }
 
+    // TODO: To be fetched from post
+    const points = 1;
+
+    if (sender.points < points) {
+      throw new UnprocessableEntityException(
+        'Insufficient balance from sender',
+      );
+    }
+
     try {
       session.startTransaction();
 
-      // TODO: To be fetched from post
-      const points = 1;
       const senderToPoints = sender.points - points;
       const receiverToPoints = receiver.points + points;
 
