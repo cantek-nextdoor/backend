@@ -24,14 +24,16 @@ export class PostService {
     return createdPost;
   }
 
-  async fetchPosts() {
-    try{
-    // Use the model to find all records, limit the result to 50, and sort by date in descending order
-    return this._postModel
-      .find()
-      .sort({ postedDate: 1 }) // -1 for descending order, 1 for ascending order
-      .limit(50)
-      .exec();
+  async fetchPosts(postalCode: string, distance: number) {
+    // Get all posts from nearby postal codes
+    const nearbyCodes = this._locService.getNearbyPostalCodes(distance, postalCode);
+    try {
+      // Use the model to find all records, limit the result to 50, and sort by date in descending order
+      return this._postModel
+        .find({ postalCode: { $in: nearbyCodes } })
+        .sort({ postedDate: -1 }) // -1 for descending order, 1 for ascending order
+        .limit(50)
+        .exec();
     } catch (error) {
       console.log(error);
     }
