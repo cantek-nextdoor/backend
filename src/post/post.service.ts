@@ -6,11 +6,13 @@ import { Post, PostDocument } from './schemas/post.schema';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { v4 as uuid } from 'uuid';
 import { category } from './status/categories';
+import { LocationService } from 'src/location/location.service';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectModel(Post.name) private _postModel: Model<PostDocument>,
+    private _locService: LocationService,
   ) {}
 
   async create(createPostDto: CreatePostDto): Promise<Post> {
@@ -73,7 +75,7 @@ export class PostService {
   
   async findPostsByPostalCode(postalCodeForSearch: string) {
     try {
-      const posts = await this._postModel.find({ PostalCode: postalCodeForSearch });
+      const posts = await this._postModel.find({ postalCode : postalCodeForSearch });
       return posts;
     } catch (error) {
       console.log(error);
@@ -83,13 +85,41 @@ export class PostService {
   async searchPostsByTitle(titleForSearch: string) {
     const regex = new RegExp(titleForSearch, 'i'); // 'i' makes the search case-insensitive
     try {
-    const posts = await this._postModel.find({ title: { $regex: regex } }).exec();
-    return posts;
+      const posts = await this._postModel.find({ title: { $regex: regex } }).exec();
+      return posts;
     } catch (error) {
-    console.log(error);
+      console.log(error);
     }
   } 
 
+  async searchNearbyEvents(postalCode: string, date : Date, distance : number) {
+    try {
+      const nextMonth = new Date(date);
+      nextMonth.setMonth(date.getMonth() + 1);
+      const events = await this._postModel.find({ eventDateAndTime: { $gte: date, $lt: nextMonth },
+                                                  categories : category.activity});
+      
+      const currPostalCode = await this._locService.findLocation(postalCode);
+
+      const result = [];
+      events.forEach((item) => {
+        if (
+          this._locService.calculateDistance(
+            currPostalCode.latitude,
+            currPostalCode.longtitude,
+            item.latitude,
+            item.longitude,
+          ) <= distance
+        ) {
+          result.push(item);
+        }
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   async updatePost(postId: string, updatePostDto: UpdatePostDto) {
     try {
       const updateResult = await this._postModel.updateOne(

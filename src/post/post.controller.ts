@@ -29,9 +29,9 @@ export class PostController {
   }
 
 //fetch 50 recent posts
-  @Get('/all')
-  async fetchPosts() {
-    const PostList = await this._PostService.fetchPosts();
+  @Get('/all/:postalCode/:distance')
+  async fetchPosts(@Param('postalCode') postalCode: string, @Param('distance') distance: number) {
+    const PostList = await this._PostService.fetchPosts(postalCode, distance);
     return PostList;
   }
 
@@ -53,16 +53,22 @@ export class PostController {
     return PostList;
   }
 
-  @Get('/searchPosts/postalcode/:postalcode')
-  async findPostsByPostalCode(@Param('postalcode') PostalCode: string) {
+  @Get('/searchPosts/postalCode/:postalCode')
+  async findPostsByPostalCode(@Param('postalCode') PostalCode: string) {
    const PostList = await this._PostService.findPostsByPostalCode(PostalCode);
    return PostList;
  }
 
   @Get('/searchPosts/title/:title')
   async searchPostsByTitle(@Param('title') Title: string) {
-   const posts = await this._PostService.searchPostsByTitle(Title);
-   return posts;
+    const posts = await this._PostService.searchPostsByTitle(Title);
+    return posts;
+ }
+
+   @Get('/searchEvents/:postalCode/:date/:distance')
+  async searchNearbyEvents(@Param('postalCode') postalCode: string, @Param('date') date : Date, @Param('distance') distance : number) {
+    const posts = await this._PostService.searchNearbyEvents(postalCode, date, distance);
+    return posts;
  }
 
   @Patch('/update')
