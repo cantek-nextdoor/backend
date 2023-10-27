@@ -38,9 +38,10 @@ export class UserController {
   }
   
   @Get('ranking/:userid')
-  async getRankedUsersPosition(@Param('userid') userid : string, @Response() res) {
+  async getRankedUsersPosition(@Param('userid') userid : string) {
     const userPosition = (await this._userService.getRankedUsersPosition(userid));
-    createJsonResponse(res, userPosition);
+    console.log("userRankingPosition: ",userPosition);
+    return {userPosition}
   }
 
   @UseGuards(JwtGuard)
