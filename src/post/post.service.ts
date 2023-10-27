@@ -26,11 +26,12 @@ export class PostService {
 
   async fetchPosts(postalCode: string, distance: number) {
     // Get all posts from nearby postal codes
-    const nearbyCodes = this._locService.getNearbyPostalCodes(distance, postalCode);
+    const nearbyCodes = await this._locService.getNearbyPostalCodes(distance, postalCode);
+    const postalCodesArray = nearbyCodes.map(location => location.postalCode);
     try {
       // Use the model to find all records, limit the result to 50, and sort by date in descending order
-      return this._postModel
-        .find({ postalCode: { $in: nearbyCodes } })
+      return await this._postModel
+        .find({ postalCode: { $in: postalCodesArray } })
         .sort({ postedDate: -1 }) // -1 for descending order, 1 for ascending order
         .limit(50)
         .exec();

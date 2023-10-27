@@ -56,6 +56,8 @@ export class LocationService {
       }
     });
 
+    // include user postal code
+    result.push(targetLocation);
     // Cache the result with a specific time-to-live (TTL)
     await this._cacheService.set(cacheKey, result, 3600); // Cache result for 1 hour
     return result;
