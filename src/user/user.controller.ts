@@ -42,7 +42,6 @@ export class UserController {
     const userPosition = (await this._userService.getRankedUsersPosition(userid));
     console.log("userRankingPosition: ",userPosition);
     return {userPosition}
-    // createJsonResponse(res, userPosition);
   }
 
   @UseGuards(JwtGuard)
