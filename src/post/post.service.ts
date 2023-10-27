@@ -27,7 +27,7 @@ export class PostService {
     // Use the model to find all records, limit the result to 50, and sort by date in descending order
     return this._postModel
       .find()
-      .sort({ postedDate: -1 }) // -1 for descending order, 1 for ascending order
+      .sort({ postedDate: 1 }) // -1 for descending order, 1 for ascending order
       .limit(50)
       .exec();
     } catch (error) {

@@ -106,8 +106,8 @@ export class UserService {
   async getRankedUsersPosition(userId: string): Promise<number> {
     const sortedUsers = await this._userModel.find().sort({ points: -1 }).exec();
     const specificUser = sortedUsers.find(user => user.uuid.toString() === userId);
-    const userRankingPosition = sortedUsers.indexOf(specificUser);
-    return userRankingPosition + 1;
+    const userRankingPosition = sortedUsers.indexOf(specificUser) +1;
+    return userRankingPosition;
   }
 
   async updateUser(updateUserDto: UpdateUserDto) {
