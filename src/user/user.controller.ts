@@ -22,8 +22,18 @@ export class UserController {
     private _userService: UserService,
   ) {}
 
+  @UseGuards(JwtGuard)
+  @Get('me')
+  async getMe(@Request() req, @Response() res) {
+    const user = await this._userService.findUserByProps(
+      { uuid: req.user.uuid },
+      { password: 0 },
+    );
+    createJsonResponse(res, user);
+  }
+
   @Get('details/:_id')
-  async getUserDetails(@Param('_id') uuid: string , @Response() res) {
+  async getUserDetails(@Param('_id') uuid: string, @Response() res) {
     const user = await this._userService.findUserByProps(
       { uuid },
       { password: 0 },
@@ -36,12 +46,12 @@ export class UserController {
     const users = (await this._userService.getTopTenRankedUsers())[0];
     createJsonResponse(res, users);
   }
-  
+
   @Get('ranking/:userid')
-  async getRankedUsersPosition(@Param('userid') userid : string) {
-    const userPosition = (await this._userService.getRankedUsersPosition(userid));
-    console.log("userRankingPosition: ",userPosition);
-    return {userPosition}
+  async getRankedUsersPosition(@Param('userid') userid: string) {
+    const userPosition = await this._userService.getRankedUsersPosition(userid);
+    console.log('userRankingPosition: ', userPosition);
+    return { userPosition };
   }
 
   @UseGuards(JwtGuard)

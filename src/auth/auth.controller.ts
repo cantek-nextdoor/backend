@@ -50,7 +50,9 @@ export class AuthController {
     }
     const tokenDetails = await this._authService.signJwt(user);
     this._authService.setTokensToCookies(res, tokenDetails);
-    return { url: process.env.CLIENT_URL ?? 'http://localhost:5173' };
+    return {
+      url: process.env.CLIENT_URL + '/home' ?? 'http://localhost:5173/home',
+    };
   }
 
   @UseGuards(LocalAuthGuard)
