@@ -23,7 +23,7 @@ export class UserService {
         userType: UserAccount.DEFAULT,
         password: encryptedPassword,
         postalCode: createUserDto.postalCode.toUpperCase().replace('-', ' '),
-        points: 0,
+        points: 20,
         displayName: createUserDto.email.split('@')[0],
         likedPostList: [],
       };
@@ -51,7 +51,7 @@ export class UserService {
         uuid,
         userType: UserAccount.GOOGLE,
         postalCode: 'M5J 1E6', // Union Station postal code
-        points: 0,
+        points: 20,
         displayName: createGoogleUserDto.email.split('@')[0],
         likedPostList: [],
       };

@@ -16,6 +16,6 @@ export class TransactionService {
   }
 
   async getUserTransactions(uuid: string): Promise<Transaction[]> {
-    return this._transactionModel.find({ uuid });
+    return this._transactionModel.find({ userId: uuid }).lean();
   }
 }

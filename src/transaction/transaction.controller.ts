@@ -2,6 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
+  Get,
+  Param,
   Post,
   Request,
   Response,
@@ -24,6 +27,24 @@ export class TransactionController {
     private _transactionService: TransactionService,
     @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
+
+  @UseGuards(JwtGuard)
+  @Get(':uuid')
+  async getTransactions(
+    @Param('uuid') uuid: string,
+    @Request() req,
+    @Response() res,
+  ) {
+    if (req.user.uuid !== uuid) {
+      throw new ForbiddenException('User uuid not match!');
+    }
+
+    const userTransactions = await this._transactionService.getUserTransactions(
+      uuid,
+    );
+
+    createJsonResponse(res, { userTransactions });
+  }
 
   @UseGuards(JwtGuard)
   @Post('create')
@@ -97,11 +118,18 @@ export class TransactionController {
       receiver = user;
     }
 
+    // TODO: To be fetched from post
+    const points = 1;
+
+    if (sender.points < points) {
+      throw new UnprocessableEntityException(
+        'Insufficient balance from sender',
+      );
+    }
+
     try {
       session.startTransaction();
 
-      // TODO: To be fetched from post
-      const points = 1;
       const senderToPoints = sender.points - points;
       const receiverToPoints = receiver.points + points;
 
